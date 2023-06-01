@@ -1,0 +1,26 @@
+{
+  "item0": {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content": {
+      "jcr:title": "Ultimate Guide to LA Skateparks"
+    }
+  },
+  "item1": {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content": {
+      "jcr:title": "Ultimate Guide to LA Skateparks"
+    }
+  },
+  "item2": {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content": {
+      "jcr:title": "Ultimate Guide to LA Skateparks"
+    }
+  },
+  "item3": {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content": {
+      "jcr:title": "Ultimate Guide to LA Skateparks"
+    }
+  }
+}
