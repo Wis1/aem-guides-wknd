@@ -60,7 +60,7 @@ def activatePagesAndWriteToFile(rows, savePath) {
     oos.close()
 
     InputStream stream = new ByteArrayInputStream(baos.toByteArray())
-    am.createAsset(savePath, stream, "", true)
+    am.createAsset(savePath, stream, "text/plain", true)
 
     debug("Results saved to ${savePath}")
 }
