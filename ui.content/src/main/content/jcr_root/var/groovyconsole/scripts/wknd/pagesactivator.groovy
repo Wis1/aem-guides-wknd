@@ -1,7 +1,7 @@
 /* groovy Pages Activator  */
 /**************************************************************************************************
  * {the script finds all deactivated pages on a specific path, then activates them and writes
- * to a file, when and which pages have been activated }
+ * to a file when and which pages have been activated }
  *************************************************************************************************/
 
 import com.day.cq.dam.api.AssetManager
@@ -11,7 +11,7 @@ import java.time.LocalDateTime
 
 // ############## Input variables  ##############
 
-def path = "/content/wknd/us/en"
+def path = "/content/wknd/us/en/magazine"
 
 def query = createSQL2Query(path)
 
@@ -21,39 +21,43 @@ def result = query.execute()
 
 def rows = result.rows
 
-def actualDate= LocalDateTime.now().withNano(0).toString().replaceAll("[:-]", ".")
+def actualDate = LocalDateTime.now().withNano(0).toString().replaceAll("[:-]", ".")
 
-def savePath = "/content/dam/wknd/resultspageactivator/"+actualDate+".txt" ;
+def savePath = "/content/dam/wknd/resultspageactivator/" + actualDate + ".txt"
 
 // ############## Implementation  ##############
 
 println "found ${rows.size} result(s)"
+activatePagesAndWriteToFile(rows, savePath)
 
-slingRequest=slingRequest.getResourceResolver();
-AssetManager am = slingRequest.adaptTo(AssetManager.class)
+def activatePagesAndWriteToFile(rows, savePath) {
 
-ByteArrayOutputStream baos = new ByteArrayOutputStream();
-ObjectOutputStream oos = new ObjectOutputStream(baos);
+    slingRequest = slingRequest.getResourceResolver()
+    AssetManager am = slingRequest.adaptTo(AssetManager.class)
 
-rows.each { row ->
-    activate(row.path)
-    println "Activated page: ${row.path}"
-    oos.writeObject(row.path);
+    ByteArrayOutputStream baos = new ByteArrayOutputStream()
+    ObjectOutputStream oos = new ObjectOutputStream(baos)
+
+    rows.each { row ->
+        activate(row.path)
+        println "Activated page: ${row.path}"
+        oos.writeObject(row.path + "\n")
+    }
+
+    oos.flush()
+    oos.close()
+
+    InputStream stream = new ByteArrayInputStream(baos.toByteArray())
+    am.createAsset(savePath, stream, "", true)
+
+    println "Results saved to ${savePath}"
 }
-
-oos.flush();
-oos.close();
-
-InputStream stream= new ByteArrayInputStream(baos.toByteArray());
-am.createAsset(savePath,stream,"",true);
-
-println "Results saved to ${savePath}"
 
 def createSQL2Query(path) {
     def queryManager = session.workspace.queryManager
 
     def statement = "SELECT * FROM [cq:Page] WHERE ISDESCENDANTNODE('$path') " +
-            "AND ([jcr:content/jcr:lastReplicationAction] = 'isDeactivated'"+
+            "AND ([jcr:content/jcr:lastReplicationAction] = 'isDeactivated'" +
             "OR [jcr:content/jcr:lastReplicationAction] IS NULL)"
 
     def query = queryManager.createQuery(statement, Query.JCR_SQL2)
