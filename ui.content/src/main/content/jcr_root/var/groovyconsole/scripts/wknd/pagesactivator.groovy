@@ -5,17 +5,23 @@
  *************************************************************************************************/
 
 import com.day.cq.dam.api.AssetManager
-
+import groovy.transform.Field
 import javax.jcr.query.Query
 import java.time.LocalDateTime
 
 // ############## Input variables  ##############
 
+// set to false to save changes
+@Field final boolean DRY_RUN = true
+
+// set to true to print debug messages
+@Field final boolean DEBUG = true
+
 def path = "/content/wknd/us/en/magazine"
 
 def query = createSQL2Query(path)
 
-println "query = ${query.statement}"
+debug("query = ${query.statement}")
 
 def result = query.execute()
 
@@ -27,8 +33,14 @@ def savePath = "/content/dam/wknd/resultspageactivator/" + actualDate + ".txt"
 
 // ############## Implementation  ##############
 
-println "found ${rows.size} result(s)"
-activatePagesAndWriteToFile(rows, savePath)
+def debug(String message) {
+    if (DEBUG) {
+        println message
+        log.info(message)
+    }
+}
+
+debug("found ${rows.size} result(s)")
 
 def activatePagesAndWriteToFile(rows, savePath) {
 
@@ -40,7 +52,7 @@ def activatePagesAndWriteToFile(rows, savePath) {
 
     rows.each { row ->
         activate(row.path)
-        println "Activated page: ${row.path}"
+        debug("Activated page: ${row.path}")
         oos.writeObject(row.path + "\n")
     }
 
@@ -50,7 +62,7 @@ def activatePagesAndWriteToFile(rows, savePath) {
     InputStream stream = new ByteArrayInputStream(baos.toByteArray())
     am.createAsset(savePath, stream, "", true)
 
-    println "Results saved to ${savePath}"
+    debug("Results saved to ${savePath}")
 }
 
 def createSQL2Query(path) {
@@ -63,4 +75,23 @@ def createSQL2Query(path) {
     def query = queryManager.createQuery(statement, Query.JCR_SQL2)
 
     query
+}
+
+// ############## Execution  ##############
+
+try {
+
+    activatePagesAndWriteToFile(rows, savePath)
+
+} catch (Exception e) {
+    session.refresh(false)
+    throw e
+} finally {
+    if (DRY_RUN) {
+        debug('Dry run finished. No changes saved')
+        session.refresh(false)
+    } else {
+        debug('Migration finished. Changes saved')
+        session.save()
+    }
 }
