@@ -44,22 +44,16 @@ debug("found ${rows.size} result(s)")
 
 def activatePagesAndWriteToFile(rows, savePath) {
 
-    slingRequest = slingRequest.getResourceResolver()
-    AssetManager am = slingRequest.adaptTo(AssetManager.class)
-
-    ByteArrayOutputStream baos = new ByteArrayOutputStream()
-    ObjectOutputStream oos = new ObjectOutputStream(baos)
+    AssetManager am = resourceResolver.adaptTo(AssetManager.class)
+    StringBuilder stringBuilder= new StringBuilder("Activated pages:\n\n")
 
     rows.each { row ->
         activate(row.path)
         debug("Activated page: ${row.path}")
-        oos.writeObject(row.path + "\n")
+        stringBuilder.append(row.path+"\n")
     }
 
-    oos.flush()
-    oos.close()
-
-    InputStream stream = new ByteArrayInputStream(baos.toByteArray())
+    InputStream stream = new ByteArrayInputStream(stringBuilder.toString().getBytes())
     am.createAsset(savePath, stream, "text/plain", true)
 
     debug("Results saved to ${savePath}")
@@ -69,20 +63,16 @@ def createSQL2Query(path) {
     def queryManager = session.workspace.queryManager
 
     def statement = "SELECT * FROM [cq:Page] WHERE ISDESCENDANTNODE('$path') " +
-            "AND ([jcr:content/jcr:lastReplicationAction] = 'isDeactivated'" +
+            "AND ([jcr:content/jcr:lastReplicationAction] = 'Deactivate'" +
             "OR [jcr:content/jcr:lastReplicationAction] IS NULL)"
 
-    def query = queryManager.createQuery(statement, Query.JCR_SQL2)
-
-    query
+    queryManager.createQuery(statement, Query.JCR_SQL2)
 }
 
 // ############## Execution  ##############
 
 try {
-
     activatePagesAndWriteToFile(rows, savePath)
-
 } catch (Exception e) {
     session.refresh(false)
     throw e
