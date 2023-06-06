@@ -4,7 +4,6 @@
  * to a file when and which pages have been activated }
  *************************************************************************************************/
 
-
 import com.day.cq.dam.api.AssetManager
 import groovy.transform.Field
 
@@ -21,17 +20,9 @@ import java.time.LocalDateTime
 
 def path = "/content/wknd/us/en/magazine"
 
-def query = createSQL2Query(path)
+def rows
 
-debug("query = ${query.statement}")
-
-def result = query.execute()
-
-def rows = result.rows
-
-def actualDate = LocalDateTime.now().withNano(0).toString().replaceAll("[:-]", ".")
-
-def savePath = "/content/dam/wknd/resultspageactivator/" + actualDate + ".txt"
+StringBuilder stringBuilder = new StringBuilder("Activated pages:\n\n")
 
 // ############## Implementation  ##############
 
@@ -42,45 +33,36 @@ def debug(String message) {
     }
 }
 
-debug("found ${rows.size} result(s)")
-
-def activatePagesAndWriteToFile(rows, savePath) {
-
-    AssetManager am = resourceResolver.adaptTo(AssetManager.class)
-    StringBuilder stringBuilder = new StringBuilder("Activated pages:\n\n")
-
+def activatePages(rows,stringBuilder) {
     rows.each { row ->
-        if (!DRY_RUN) {
-            activate(row.path)
-            debug("Activated page: ${row.path}")
-        }
+        activate(row.path)
         stringBuilder.append(row.path + "\n")
     }
-
-    if (!DRY_RUN) {
-
-        InputStream stream = new ByteArrayInputStream(stringBuilder.toString().getBytes())
-        am.createAsset(savePath, stream, "text/plain", true)
-        debug("Results saved to ${savePath}")
-    } else {
-        debug("Dry run mode. Results not saved.")
-    }
+    stringBuilder
+}
+def createReport(stringBuilder) {
+    AssetManager am = resourceResolver.adaptTo(AssetManager.class)
+    InputStream stream = new ByteArrayInputStream(stringBuilder.toString().getBytes())
+    def actualDate = LocalDateTime.now().withNano(0).toString().replaceAll("[:-]", ".")
+    def savePath = "/content/dam/wknd/resultspageactivator/" + actualDate + ".txt"
+    am.createAsset(savePath, stream, "text/plain", !DRY_RUN)
 }
 
-def createSQL2Query(path) {
+def findDeactivatePages(path) {
     def queryManager = session.workspace.queryManager
 
     def statement = "SELECT * FROM [cq:Page] WHERE ISDESCENDANTNODE('$path') " +
             "AND ([jcr:content/jcr:lastReplicationAction] = 'Deactivate'" +
             "OR [jcr:content/jcr:lastReplicationAction] IS NULL)"
-
-    queryManager.createQuery(statement, Query.JCR_SQL2)
+    queryManager.createQuery(statement, Query.JCR_SQL2).execute()
 }
 
 // ############## Execution  ##############
 
 try {
-    activatePagesAndWriteToFile(rows, savePath)
+    rows = findDeactivatePages(path).rows
+    stringBuilder=activatePages(rows, stringBuilder)
+    createReport(stringBuilder)
 } catch (Exception e) {
     session.refresh(false)
     throw e
