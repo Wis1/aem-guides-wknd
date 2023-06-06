@@ -4,8 +4,10 @@
  * to a file when and which pages have been activated }
  *************************************************************************************************/
 
+
 import com.day.cq.dam.api.AssetManager
 import groovy.transform.Field
+
 import javax.jcr.query.Query
 import java.time.LocalDateTime
 
@@ -45,18 +47,24 @@ debug("found ${rows.size} result(s)")
 def activatePagesAndWriteToFile(rows, savePath) {
 
     AssetManager am = resourceResolver.adaptTo(AssetManager.class)
-    StringBuilder stringBuilder= new StringBuilder("Activated pages:\n\n")
+    StringBuilder stringBuilder = new StringBuilder("Activated pages:\n\n")
 
     rows.each { row ->
-        activate(row.path)
-        debug("Activated page: ${row.path}")
-        stringBuilder.append(row.path+"\n")
+        if (!DRY_RUN) {
+            activate(row.path)
+            debug("Activated page: ${row.path}")
+        }
+        stringBuilder.append(row.path + "\n")
     }
 
-    InputStream stream = new ByteArrayInputStream(stringBuilder.toString().getBytes())
-    am.createAsset(savePath, stream, "text/plain", true)
+    if (!DRY_RUN) {
 
-    debug("Results saved to ${savePath}")
+        InputStream stream = new ByteArrayInputStream(stringBuilder.toString().getBytes())
+        am.createAsset(savePath, stream, "text/plain", true)
+        debug("Results saved to ${savePath}")
+    } else {
+        debug("Dry run mode. Results not saved.")
+    }
 }
 
 def createSQL2Query(path) {
