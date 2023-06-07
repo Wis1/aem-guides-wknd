@@ -20,8 +20,6 @@ import java.time.LocalDateTime
 
 def path = "/content/wknd/us/en/magazine"
 
-def rows
-
 StringBuilder stringBuilder = new StringBuilder("Activated pages:\n\n")
 
 // ############## Implementation  ##############
@@ -38,8 +36,8 @@ def activatePages(rows,stringBuilder) {
         activate(row.path)
         stringBuilder.append(row.path + "\n")
     }
-    stringBuilder
 }
+
 def createReport(stringBuilder) {
     AssetManager am = resourceResolver.adaptTo(AssetManager.class)
     InputStream stream = new ByteArrayInputStream(stringBuilder.toString().getBytes())
@@ -54,14 +52,15 @@ def findDeactivatePages(path) {
     def statement = "SELECT * FROM [cq:Page] WHERE ISDESCENDANTNODE('$path') " +
             "AND ([jcr:content/jcr:lastReplicationAction] = 'Deactivate'" +
             "OR [jcr:content/jcr:lastReplicationAction] IS NULL)"
-    queryManager.createQuery(statement, Query.JCR_SQL2).execute()
+    queryManager.createQuery(statement, Query.JCR_SQL2).execute().rows
 }
 
 // ############## Execution  ##############
 
 try {
-    rows = findDeactivatePages(path).rows
-    stringBuilder=activatePages(rows, stringBuilder)
+    if (!DRY_RUN) {
+        activatePages(findDeactivatePages(path), stringBuilder)
+    }
     createReport(stringBuilder)
 } catch (Exception e) {
     session.refresh(false)
