@@ -1,0 +1,17 @@
+{
+  "sellofferitem-with-discount": {
+    "jcr:primaryType": "nt:unstructured",
+    "sling:resourceType": "wknd/components/content/sellofferitem",
+    "productImageRef": "/content/dam/wknd/en/magazine/la-skateparks/tv.jpg",
+    "product": "tv",
+    "valueofdiscount": 20,
+    "specialoffer": "Yes"
+  },
+  "sellofferitem-without-discount": {
+    "jcr:primaryType": "nt:unstructured",
+    "sling:resourceType": "wknd/components/content/sellofferitem",
+    "productImageRef": "/content/dam/wknd/en/magazine/la-skateparks/tv.jpg",
+    "product": "tv",
+    "specialoffer": "No"
+  }
+}

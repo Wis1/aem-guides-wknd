@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workspaceFilter version="1.0">
+    <filter root="/content/data" mode="merge"/>
     <filter root="/conf/wknd" mode="merge"/>
     <filter root="/var/groovyconsole/scripts" mode="merge"/>
     <filter root="/content/wknd" mode="merge"/>

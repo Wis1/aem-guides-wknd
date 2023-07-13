@@ -6,7 +6,6 @@
 
 import com.day.cq.dam.api.AssetManager
 import groovy.transform.Field
-
 import javax.jcr.query.Query
 import java.time.LocalDateTime
 

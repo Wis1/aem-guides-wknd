@@ -1,0 +1,20 @@
+<h3>Sell Offer Item</h3>
+
+<div data-sly-use.sellofferitem="com.adobe.aem.guides.wknd.core.models.SellOfferItem"
+     data-sly-use.placeholderTemplate="core/wcm/components/commons/v1/templates.html"
+     class="cmp-sellofferitem">
+    <div data-sly-test="${sellofferitem.isSpecialOffer}">
+        <p> SALE   !!!   SPECIAL OFFER   !!!   SALE </p>
+    </div>
+    <h2>${sellofferitem.price} PLN !</h2>
+    <p>${sellofferitem.nameOfProduct}</p>
+
+    <div data-sly-repeat.item="${sellofferitem.properties}">
+        <ul>
+            <li> ${item.propertyName}: ${item.propertyValue}</li>
+        </ul>
+    </div>
+
+    <img src="${sellofferitem.image}" width="100px" height="80px">
+
+</div>

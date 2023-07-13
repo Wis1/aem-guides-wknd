@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+          xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+          xmlns:granite="http://www.adobe.com/jcr/granite/1.0"
+          xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          jcr:primaryType="nt:unstructured"
+          jcr:title="Sellofferitem"
+          extraClientlibs="[showhidetab.clientlib-hidetab]"
+          sling:resourceType="cq/gui/components/authoring/dialog">
+    <content
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/foundation/container">
+        <layout
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/foundation/layouts/tabs"
+                type="nav"/>
+        <items jcr:primaryType="nt:unstructured">
+            <general
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="General"
+                    sling:resourceType="granite/ui/components/foundation/section">
+                <layout
+                        jcr:primaryType="nt:untstructured"
+                        sling:resourceType="granite/ui/components/foundation/layouts/fixedcolumns"
+                        margin="{Boolean}false"/>
+                <items jcr:primaryType="nt:unstructured">
+                    <column
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/foundation/container">
+                        <items jcr:primaryType="nt:unstructured">
+                            <product
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/foundation/form/select"
+                                    class="cq-dialog-tab-showhide"
+                                    cq-dialog-tab-showhide-target=".tv-fridge-tab-showhide-target"
+                                    fieldLabel="Product"
+                                    name="./product">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <product1
+                                            jcr:primaryType="nt:unstructured"
+                                            text="TV"
+                                            value="tv"/>
+                                    <product2
+                                            jcr:primaryType="nt:unstructured"
+                                            text="Fridge"
+                                            value="fridge"/>
+                                </items>
+                            </product>
+                            <specialoffer
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/foundation/form/select"
+                                    class="cq-dialog-dropdown-showhide"
+                                    cq-dialog-dropdown-showhide-target=".specialoffer-showhide-target"
+                                    fieldLabel="Special offer"
+                                    name="./specialoffer">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <yes
+                                            jcr:primaryType="nt:unstructured"
+                                            text="No"
+                                            value="No"/>
+                                    <no
+                                            jcr:primaryType="nt:unstructured"
+                                            text="Yes"
+                                            value="Yes"/>
+                                </items>
+                            </specialoffer>
+                            <discount
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/foundation/container"
+                                    class="hide specialoffer-showhide-target"
+                                    showhidetargetvalue="Yes">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <column
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/foundation/container">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <valueofdiscount
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                                    fieldDescription="Enter a value of discount (in percentage from 10 and 55)"
+                                                    fieldLabel="Value of discount [%]"
+                                                    defaultValue="10"
+                                                    name="./valueofdiscount"
+                                                    min="10"
+                                                    max="55"
+                                                    required="{Boolean}false">
+                                            </valueofdiscount>
+                                        </items>
+                                    </column>
+                                </items>
+                            </discount>
+                        </items>
+                    </column>
+                </items>
+            </general>
+            <image jcr:primaryType="nt:unstructured"
+                   jcr:title="Image"
+                   sling:resourceType="granite/ui/components/foundation/container"
+                   margin="{Boolean}true">
+                <items jcr:primaryType="nt:unstructured">
+                    <upload
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/foundation/form/fileupload"
+                            autoStart="{Boolean}false"
+                            class="cq-droptarget"
+                            fieldLabel="Image"
+                            fileNameParameter="./productImageName"
+                            fileReferenceParameter="./productImageRef"
+                            mimeTypes="[image]"
+                            multiple="{Boolean}false"
+                            name="./image"
+                            title="Upload Image"
+                            uploadUrl="${suffix.path}"
+                            useHTML5="{Boolean}true"/>
+                    <metadata
+                            jcr:primaryType="nt:unstructured"
+                            sling:hideResource="{Boolean}true"/>
+                </items>
+            </image>
+            <tv
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="TV"
+                    sling:resourceType="granite/ui/components/foundation/section">
+                <layout
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/foundation/layouts/fixedcolumns"
+                        margin="{Boolean}false"/>
+                <layoutConfig
+                        jcr:primaryType="nt:unstructured"
+                        class="hide tv-fridge-tab-showhide-target tv"/>
+                <items jcr:primaryType="nt:unstructured">
+                    <column
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/foundation/container">
+                        <items jcr:primaryType="nt:unstructured">
+                            <producer
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/foundation/form/select"
+                                    fieldDescription="Select producer"
+                                    fieldLabel="Producer"
+                                    name="./tvproducer"
+                                    useFixedInlineToolbar="{Boolean}true">
+                                <datasource
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="wknd/components/datasource"
+                                        dropdownSelector="producerList"/>
+                            </producer>
+                            <model
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/foundation/form/select"
+                                    fieldLabel="Model"
+                                    fieldDescription="Select model"
+                                    name="./tvmodel"
+                                    useFixedInlineToolbar="{Boolean}true">
+                                <datasource
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="wknd/components/datasource"
+                                        dropdownSelector="tvmodelList"/>
+                            </model>
+                            <price
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/foundation/container">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <column
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/foundation/container">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <baseprice
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                                    fieldDescription="Enter a base price"
+                                                    fieldLabel="Base price"
+                                                    name="./basetvprice"
+                                                    typeHint="Decimal"
+                                                    step="0.01"
+                                                    min="0.01"
+                                                    required="{Boolean}false">
+                                            </baseprice>
+                                        </items>
+                                    </column>
+                                </items>
+                            </price>
+                            <properties
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                    fieldDescription="A list of properties."
+                                    fieldLabel="Properties"
+                                    composite="{Boolean}true"
+                                    required="{Boolean}false">
+                                <field jcr:primaryType="nt:unstructured"
+                                       sling:resourceType="granite/ui/components/coral/foundation/form/fieldset"
+                                       acs-commons-nested="NODE_STORE"
+                                       name="./tvproperties">
+                                    <layout jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/foundation/layouts/fixedcolumns"
+                                            method="absolute"/>
+                                    <items jcr:primaryType="nt:unstructured">
+                                        <column jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/foundation/container">
+                                            <items jcr:primaryType="nt:unstructured">
+                                                <propertyname jcr:primaryType="nt:unstructured"
+                                                              sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                              fieldLabel="Property Name"
+                                                              name="./propertyname"/>
+                                                <valueproperty jcr:primaryType="nt:unstructured"
+                                                               sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                               fieldLabel="Value property"
+                                                               name="./propertyvalue"/>
+                                            </items>
+                                        </column>
+                                    </items>
+                                </field>
+                            </properties>
+                        </items>
+                    </column>
+                </items>
+            </tv>
+            <fridge
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Fridge"
+                    sling:resourceType="granite/ui/components/foundation/section">
+                <layout
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/foundation/layouts/fixedcolumns"
+                        margin="{Boolean}false"/>
+                <layoutConfig
+                        jcr:primaryType="nt:unstructured"
+                        class="hide tv-fridge-tab-showhide-target fridge"/>
+                <items
+                        jcr:primaryType="nt:unstructured">
+                    <column
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/foundation/container">
+                        <items jcr:primaryType="nt:unstructured">
+                            <producer
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/foundation/form/select"
+                                    fieldDescription="Select producent"
+                                    fieldLabel="Producer"
+                                    name="./fridgeproducer"
+                                    useFixedInlineToolbar="{Boolean}true">
+                                <datasource
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="wknd/components/datasource"
+                                        dropdownSelector="producerList"/>
+                            </producer>
+                            <model
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/foundation/form/select"
+                                    fieldLabel="Model"
+                                    name="./fridgemodel"
+                                    useFixedInlineToolbar="{Boolean}true">
+                                <datasource
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="wknd/components/datasource"
+                                        dropdownSelector="fridgemodelList"/>
+                            </model>
+                            <price
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/foundation/container">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <column
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/foundation/container">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <baseprice
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                                    fieldDescription="Enter a base price"
+                                                    fieldLabel="Base price"
+                                                    name="./basefridgeprice"
+                                                    typeHint="Decimal"
+                                                    step="0.01"
+                                                    min="0.01"
+                                                    required="{Boolean}false">
+                                            </baseprice>
+                                        </items>
+                                    </column>
+                                </items>
+                            </price>
+                            <properties
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                    fieldDescription="A list of properties."
+                                    fieldLabel="Properties"
+                                    composite="{Boolean}true"
+                                    required="{Boolean}false">
+                                <field jcr:primaryType="nt:unstructured"
+                                       sling:resourceType="granite/ui/components/coral/foundation/form/fieldset"
+                                       acs-commons-nested="NODE_STORE"
+                                       name="./fridgeproperties">
+                                    <layout jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/foundation/layouts/fixedcolumns"
+                                            method="absolute"/>
+                                    <items jcr:primaryType="nt:unstructured">
+                                        <column jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/foundation/container">
+                                            <items jcr:primaryType="nt:unstructured">
+                                                <propertyname jcr:primaryType="nt:unstructured"
+                                                              sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                              fieldLabel="Property Name"
+                                                              name="./propertyname"/>
+                                                <valueproperty jcr:primaryType="nt:unstructured"
+                                                               sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                               fieldLabel="Value property"
+                                                               name="./propertyvalue"/>
+                                            </items>
+                                        </column>
+                                    </items>
+                                </field>
+                            </properties>
+                        </items>
+                    </column>
+                </items>
+            </fridge>
+        </items>
+    </content>
+</jcr:root>
